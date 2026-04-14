@@ -6,19 +6,10 @@
 <title>ASCEND AI SUPER PLATFORM</title>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#0a0a0a;color:white}
 
-body{
-background:#0a0a0a;
-color:white;
-}
-
-/* TOP BAR */
+/* TOP */
 .top{
 padding:15px;
 background:#111;
@@ -26,14 +17,10 @@ text-align:center;
 font-size:20px;
 font-weight:bold;
 color:#00f7ff;
-letter-spacing:1px;
 }
 
 /* LAYOUT */
-.container{
-display:flex;
-height:calc(100vh - 60px);
-}
+.container{display:flex;height:calc(100vh - 60px)}
 
 /* SIDEBAR */
 .sidebar{
@@ -56,23 +43,11 @@ transition:0.2s;
 font-weight:bold;
 }
 
-.sidebar button:hover{
-background:#00f7ff;
-color:black;
-transform:scale(1.03);
-}
-
-.sidebar button.active{
-background:#00f7ff;
-color:black;
-}
+.sidebar button:hover{background:#00f7ff;color:black}
+.sidebar button.active{background:#00f7ff;color:black}
 
 /* MAIN */
-.main{
-flex:1;
-padding:15px;
-overflow:auto;
-}
+.main{flex:1;padding:15px;overflow:auto}
 
 /* CARD */
 .card{
@@ -80,12 +55,12 @@ background:#1c1c1c;
 padding:15px;
 margin-bottom:10px;
 border-radius:10px;
-animation:fadeIn 0.2s ease-in;
+animation:fade 0.2s ease-in;
 }
 
-@keyframes fadeIn{
-from{opacity:0; transform:translateY(5px);}
-to{opacity:1; transform:translateY(0);}
+@keyframes fade{
+from{opacity:0;transform:translateY(5px)}
+to{opacity:1;transform:translateY(0)}
 }
 
 /* CHAT */
@@ -100,11 +75,7 @@ flex-direction:column;
 gap:8px;
 }
 
-.input{
-display:flex;
-margin-top:10px;
-gap:8px;
-}
+.input{display:flex;margin-top:10px;gap:8px}
 
 input{
 flex:1;
@@ -126,20 +97,22 @@ color:black;
 font-weight:bold;
 }
 
+/* EMPTY STATE */
+.empty{
+color:#777;
+text-align:center;
+margin-top:20px;
+}
+
 /* MOBILE */
 @media(max-width:768px){
-.container{
-flex-direction:column;
-}
+.container{flex-direction:column}
 .sidebar{
 width:100%;
 flex-direction:row;
 overflow-x:auto;
 }
-.sidebar button{
-flex:1;
-white-space:nowrap;
-}
+.sidebar button{flex:1}
 }
 </style>
 </head>
@@ -166,17 +139,19 @@ white-space:nowrap;
 <div id="feed" class="tab">
 <div class="card">🔥 Viral AI Post #1</div>
 <div class="card">🔥 Viral AI Post #2</div>
-<div class="card">🔥 AI Generated Feed Engine Ready</div>
+<div class="card">🔥 AI Feed Engine Active</div>
 </div>
 
 <!-- CHAT -->
 <div id="chat" class="tab" style="display:none">
+
 <div class="chatbox" id="chatbox"></div>
 
 <div class="input">
 <input id="msg" placeholder="Ask AI..." onkeypress="handleKey(event)" />
 <button class="send" onclick="send()">Send</button>
 </div>
+
 </div>
 
 <!-- MARKET -->
@@ -190,12 +165,12 @@ white-space:nowrap;
 <div id="dashboard" class="tab" style="display:none">
 <div class="card">📊 Users: 1,234</div>
 <div class="card">💰 Revenue: $9,999</div>
-<div class="card">🤖 AI Agents: 56</div>
+<div class="card">🤖 Agents: 56</div>
 </div>
 
 <!-- VOICE -->
 <div id="voice" class="tab" style="display:none">
-<div class="card">🎙 Voice AI System Ready</div>
+<div class="card">🎙 Voice AI Ready</div>
 <button class="send" onclick="startVoice()">Start Voice</button>
 </div>
 
@@ -204,7 +179,7 @@ white-space:nowrap;
 
 <script>
 
-let currentTab = "feed";
+let chatBox = document.getElementById("chatbox");
 
 /* TAB SYSTEM */
 function openTab(id, btn){
@@ -214,62 +189,85 @@ document.getElementById(id).style.display="block";
 document.querySelectorAll(".sidebar button")
 .forEach(b=>b.classList.remove("active"));
 
-if(btn) btn.classList.add("active");
-
-currentTab = id;
+btn.classList.add("active");
 }
 
-/* SAFE CHAT FUNCTION */
+/* CREATE MESSAGE */
+function addMessage(text, type){
+let div = document.createElement("div");
+div.className = "card";
+div.innerText = (type==="user" ? "👤 You: " : "🤖 ") + text;
+chatBox.appendChild(div);
+
+/* ALWAYS SMOOTH SCROLL */
+chatBox.scrollTo({
+top: chatBox.scrollHeight,
+behavior:"smooth"
+});
+
+/* SAVE MEMORY */
+saveChat();
+}
+
+/* AI TYPING EFFECT */
+function typeMessage(text){
+let div = document.createElement("div");
+div.className = "card";
+chatBox.appendChild(div);
+
+let i = 0;
+let interval = setInterval(()=>{
+div.innerText = "🤖 " + text.slice(0,i);
+i++;
+chatBox.scrollTo({top:chatBox.scrollHeight});
+
+if(i > text.length) clearInterval(interval);
+},20);
+}
+
+/* CHAT SEND */
 function send(){
 let input = document.getElementById("msg");
-let box = document.getElementById("chatbox");
-
 let text = input.value.trim();
 if(!text) return;
 
-/* SAFE TEXT RENDER */
-box.innerHTML += `<div class="card">👤 You: ${escapeHtml(text)}</div>`;
+addMessage(text,"user");
 
-/* AI LOGIC */
-let reply = "🤖 I am your AI assistant.";
+let reply = "I am your AI assistant.";
 let t = text.toLowerCase();
 
-if(t.includes("fitness")) reply = "🏋️ Train daily. Consistency beats motivation.";
-if(t.includes("money")) reply = "💰 Skills + execution = income.";
-if(t.includes("study")) reply = "📚 Study daily, even 1 hour compounds.";
-if(t.includes("hello")) reply = "👋 Hello! How can I help you?";
+if(t.includes("fitness")) reply="Train daily. Discipline wins.";
+if(t.includes("money")) reply="Skills + execution = income.";
+if(t.includes("study")) reply="Study daily. Consistency is key.";
+if(t.includes("hello")) reply="Hello! How can I help you?";
 
 setTimeout(()=>{
-box.innerHTML += `<div class="card">🤖 ${reply}</div>`;
-box.scrollTop = box.scrollHeight;
+typeMessage(reply);
 },400);
 
 input.value="";
-box.scrollTop = box.scrollHeight;
 }
 
-/* ENTER KEY SUPPORT */
+/* ENTER KEY */
 function handleKey(e){
-if(e.key === "Enter") send();
+if(e.key==="Enter") send();
 }
 
-/* HTML SAFETY */
-function escapeHtml(text){
-return text
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;");
-}
-
-/* VOICE (UI ONLY) */
+/* VOICE */
 function startVoice(){
-alert("🎙 Voice AI is UI demo only. Backend required for real AI voice system.");
+alert("Voice AI needs backend integration.");
 }
 
-/* DEFAULT TAB */
-document.addEventListener("DOMContentLoaded",()=>{
-openTab("feed", document.querySelector(".sidebar button"));
-});
+/* SAVE CHAT */
+function saveChat(){
+localStorage.setItem("chat", chatBox.innerHTML);
+}
+
+/* LOAD CHAT */
+window.onload = ()=>{
+let saved = localStorage.getItem("chat");
+if(saved) chatBox.innerHTML = saved;
+};
 
 </script>
 
