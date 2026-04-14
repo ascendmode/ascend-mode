@@ -15,9 +15,33 @@ body{
   background:linear-gradient(180deg,#050505,#0f0f2a);
   color:white;
   overflow-x:hidden;
+  text-align:center;
 }
 
-/* 🔥 Animated background */
+/* Loader */
+#loader{
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:#000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+  font-size:2em;
+}
+
+/* Navbar */
+nav{
+  position:fixed;
+  top:0;
+  width:100%;
+  padding:15px;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(10px);
+}
+
+/* Animated background */
 body::before{
   content:'';
   position:fixed;
@@ -39,7 +63,6 @@ header{
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  text-align:center;
 }
 
 h1{
@@ -49,13 +72,11 @@ h1{
   color:transparent;
 }
 
-p{opacity:0.8;margin-top:10px}
-
 button{
   margin-top:25px;
   padding:15px 35px;
-  border-radius:30px;
   border:none;
+  border-radius:30px;
   background:linear-gradient(90deg,#6a00ff,#00d4ff);
   color:white;
   cursor:pointer;
@@ -73,7 +94,17 @@ section{
   margin:auto;
 }
 
-h2{text-align:center;margin-bottom:40px}
+/* Scroll animation */
+.fade{
+  opacity:0;
+  transform:translateY(40px);
+  transition:1s;
+}
+
+.show{
+  opacity:1;
+  transform:translateY(0);
+}
 
 .grid{
   display:grid;
@@ -94,7 +125,7 @@ h2{text-align:center;margin-bottom:40px}
   box-shadow:0 0 30px #6a00ff;
 }
 
-/* Progress bar */
+/* Progress */
 .progress{
   height:10px;
   background:#222;
@@ -109,7 +140,7 @@ h2{text-align:center;margin-bottom:40px}
   background:linear-gradient(90deg,#6a00ff,#00d4ff);
 }
 
-/* Chatbox */
+/* Chat */
 .chatbox{
   max-width:500px;
   margin:40px auto;
@@ -125,16 +156,16 @@ h2{text-align:center;margin-bottom:40px}
   border-radius:10px;
   margin-top:10px;
 }
-
-footer{
-  text-align:center;
-  padding:40px;
-  opacity:0.5;
-}
 </style>
 </head>
 
 <body>
+
+<div id="loader">Loading...</div>
+
+<nav>
+<h3>Ascend Mode</h3>
+</nav>
 
 <header>
 <h1>Ascend Mode</h1>
@@ -142,7 +173,7 @@ footer{
 <button onclick="scrollToMain()">Enter</button>
 </header>
 
-<section id="main">
+<section id="main" class="fade">
 <h2>Core Upgrades</h2>
 <div class="grid">
 <div class="card">🏋️ Body Discipline</div>
@@ -152,7 +183,7 @@ footer{
 </div>
 </section>
 
-<section>
+<section class="fade">
 <h2>Daily Tracker</h2>
 <label><input type="checkbox" onclick="updateProgress()"> Workout</label><br>
 <label><input type="checkbox" onclick="updateProgress()"> Grooming</label><br>
@@ -162,7 +193,7 @@ footer{
 <div class="progress"><div class="progress-bar" id="bar"></div></div>
 </section>
 
-<section>
+<section class="fade">
 <h2>Mindset Rules</h2>
 <div class="grid">
 <div class="card">Silence is power</div>
@@ -172,7 +203,7 @@ footer{
 </div>
 </section>
 
-<section>
+<section class="fade">
 <h2>AI Coach</h2>
 <div class="chatbox">
 <p id="response">Ask something...</p>
@@ -180,23 +211,53 @@ footer{
 </div>
 </section>
 
-<footer>
-Ascend Mode | No chasing. Just becoming
-</footer>
-
 <script>
 function scrollToMain(){
  document.getElementById('main').scrollIntoView({behavior:'smooth'});
 }
 
+/* Progress save */
 function updateProgress(){
  let checks=document.querySelectorAll('input[type=checkbox]');
  let total=checks.length;
  let done=0;
- checks.forEach(c=>{if(c.checked) done++});
+
+ checks.forEach((c,i)=>{
+   if(c.checked){
+     done++;
+     localStorage.setItem("check"+i,true);
+   }else{
+     localStorage.removeItem("check"+i);
+   }
+ });
+
  document.getElementById('bar').style.width=(done/total*100)+'%';
 }
 
+/* Load saved */
+window.onload=()=>{
+ let checks=document.querySelectorAll('input[type=checkbox]');
+ checks.forEach((c,i)=>{
+   if(localStorage.getItem("check"+i)){
+     c.checked=true;
+   }
+ });
+ updateProgress();
+ document.getElementById("loader").style.display="none";
+}
+
+/* Scroll animation */
+window.addEventListener('scroll',()=>{
+ let elements=document.querySelectorAll('.fade');
+ elements.forEach(el=>{
+   let position=el.getBoundingClientRect().top;
+   if(position < window.innerHeight-100){
+     el.classList.add('show');
+   }
+ });
+});
+
+/* AI */
 function talk(e){
  if(e.key==='Enter'){
   let input=document.getElementById('input').value.toLowerCase();
