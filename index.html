@@ -4,32 +4,211 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ascend Mode</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
 <style>
+*{margin:0;padding:0;box-sizing:border-box}
+
 body{
-  margin:0;
-  font-family:Arial;
-  background:#050505;
+  font-family:'Poppins',sans-serif;
+  background:linear-gradient(180deg,#050505,#0f0f2a);
   color:white;
+  overflow-x:hidden;
+}
+
+/* 🔥 Animated background */
+body::before{
+  content:'';
+  position:fixed;
+  width:200%;
+  height:200%;
+  background:radial-gradient(circle,#6a00ff22,#000000);
+  animation:move 10s linear infinite;
+  z-index:-1;
+}
+
+@keyframes move{
+  from{transform:translate(0,0)}
+  to{transform:translate(-50%,-50%)}
+}
+
+header{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
   text-align:center;
 }
+
 h1{
-  margin-top:100px;
-  font-size:3em;
+  font-size:4em;
+  background:linear-gradient(90deg,#6a00ff,#00d4ff);
+  -webkit-background-clip:text;
+  color:transparent;
 }
+
+p{opacity:0.8;margin-top:10px}
+
 button{
-  padding:15px 30px;
+  margin-top:25px;
+  padding:15px 35px;
+  border-radius:30px;
   border:none;
-  background:#6a00ff;
+  background:linear-gradient(90deg,#6a00ff,#00d4ff);
   color:white;
   cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  transform:scale(1.1);
+  box-shadow:0 0 25px #6a00ff;
+}
+
+section{
+  padding:100px 20px;
+  max-width:1100px;
+  margin:auto;
+}
+
+h2{text-align:center;margin-bottom:40px}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:25px;
+}
+
+.card{
+  background:rgba(255,255,255,0.05);
+  padding:25px;
+  border-radius:20px;
+  backdrop-filter:blur(12px);
+  transition:0.3s;
+}
+
+.card:hover{
+  transform:translateY(-10px);
+  box-shadow:0 0 30px #6a00ff;
+}
+
+/* Progress bar */
+.progress{
+  height:10px;
+  background:#222;
+  border-radius:10px;
+  overflow:hidden;
+  margin-top:15px;
+}
+
+.progress-bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#6a00ff,#00d4ff);
+}
+
+/* Chatbox */
+.chatbox{
+  max-width:500px;
+  margin:40px auto;
+  background:#111;
+  padding:20px;
+  border-radius:15px;
+}
+
+.chatbox input{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  margin-top:10px;
+}
+
+footer{
+  text-align:center;
+  padding:40px;
+  opacity:0.5;
 }
 </style>
 </head>
+
 <body>
 
+<header>
 <h1>Ascend Mode</h1>
-<p>No chasing. Just becoming.</p>
-<button>Start</button>
+<p>No chasing. Just becoming</p>
+<button onclick="scrollToMain()">Enter</button>
+</header>
+
+<section id="main">
+<h2>Core Upgrades</h2>
+<div class="grid">
+<div class="card">🏋️ Body Discipline</div>
+<div class="card">🧠 Mind Control</div>
+<div class="card">😎 Social Presence</div>
+<div class="card">🔥 Consistency</div>
+</div>
+</section>
+
+<section>
+<h2>Daily Tracker</h2>
+<label><input type="checkbox" onclick="updateProgress()"> Workout</label><br>
+<label><input type="checkbox" onclick="updateProgress()"> Grooming</label><br>
+<label><input type="checkbox" onclick="updateProgress()"> Learning</label><br>
+<label><input type="checkbox" onclick="updateProgress()"> Social</label>
+
+<div class="progress"><div class="progress-bar" id="bar"></div></div>
+</section>
+
+<section>
+<h2>Mindset Rules</h2>
+<div class="grid">
+<div class="card">Silence is power</div>
+<div class="card">Don't chase attention</div>
+<div class="card">Stay unpredictable</div>
+<div class="card">Respect yourself first</div>
+</div>
+</section>
+
+<section>
+<h2>AI Coach</h2>
+<div class="chatbox">
+<p id="response">Ask something...</p>
+<input type="text" id="input" placeholder="Type here..." onkeydown="talk(event)">
+</div>
+</section>
+
+<footer>
+Ascend Mode | No chasing. Just becoming
+</footer>
+
+<script>
+function scrollToMain(){
+ document.getElementById('main').scrollIntoView({behavior:'smooth'});
+}
+
+function updateProgress(){
+ let checks=document.querySelectorAll('input[type=checkbox]');
+ let total=checks.length;
+ let done=0;
+ checks.forEach(c=>{if(c.checked) done++});
+ document.getElementById('bar').style.width=(done/total*100)+'%';
+}
+
+function talk(e){
+ if(e.key==='Enter'){
+  let input=document.getElementById('input').value.toLowerCase();
+  let res="Stay focused.";
+  if(input.includes('confidence')) res="Confidence comes from action.";
+  if(input.includes('motivation')) res="Discipline beats motivation.";
+  if(input.includes('girl')) res="Focus on value, not validation.";
+  document.getElementById('response').innerText=res;
+  document.getElementById('input').value='';
+ }
+}
+</script>
 
 </body>
 </html>
