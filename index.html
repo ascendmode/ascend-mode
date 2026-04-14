@@ -1,235 +1,204 @@
-========================================================
-🚀 ASCEND AI GOD MODE FULL STARTUP SYSTEM
-========================================================
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASCEND AI PLATFORM</title>
 
-🔥 FEATURES:
-✔ AI Marketplace (users create bots/agents)
-✔ TikTok + Instagram + ChatGPT hybrid feed
-✔ Real SaaS analytics dashboard (charts)
-✔ Push notifications system
-✔ Live AI voice calling system
-✔ Real-time collaboration AI rooms
-✔ JWT auth + refresh security system
-✔ Rate limiting + production security
-✔ Stripe subscription (monthly billing)
-✔ Admin panel
-✔ Mobile APK ready (Capacitor)
-✔ One-click deploy scripts
-✔ Full GitHub folder structure
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#0a0a0a;
+color:white;
+}
 
-========================================================
-📁 PROJECT STRUCTURE
-========================================================
+/* TOP */
+.top{
+padding:15px;
+background:#111;
+text-align:center;
+font-size:20px;
+font-weight:bold;
+color:#00f7ff;
+}
 
-ascend-ai/
- ├── backend/
- │   ├── src/
- │   │   ├── app.js
- │   │   ├── server.js
- │   │   ├── config/db.js
- │   │   ├── models/User.js
- │   │   ├── models/Agent.js
- │   │   ├── models/Post.js
- │   │   ├── routes/auth.js
- │   │   ├── routes/chat.js
- │   │   ├── routes/feed.js
- │   │   ├── routes/voice.js
- │   │   ├── routes/stripe.js
- │   │   ├── middleware/auth.js
- │   │   ├── middleware/rateLimit.js
- │   │   ├── services/openai.js
- │   │   ├── socket/io.js
- │   ├── .env
- │
- ├── frontend/
- │   ├── src/
- │   │   ├── pages/Feed.jsx
- │   │   ├── pages/Chat.jsx
- │   │   ├── pages/Dashboard.jsx
- │   │   ├── pages/Marketplace.jsx
- │   │   ├── components/VideoCard.jsx
- │   │   ├── components/AIChat.jsx
- │   │   ├── hooks/useVoice.js
- │
- ├── mobile/
- │   ├── capacitor.config.json
- │
- ├── deploy/
- │   ├── deploy_backend.sh
- │   ├── deploy_frontend.sh
+/* LAYOUT */
+.container{
+display:flex;
+height:calc(100vh - 60px);
+}
 
-========================================================
-🔐 AUTH + JWT SECURITY (REFRESH SYSTEM)
-========================================================
+/* SIDEBAR */
+.sidebar{
+width:220px;
+background:#151515;
+padding:10px;
+display:flex;
+flex-direction:column;
+gap:10px;
+}
 
-JWT access token (15m)
-JWT refresh token (30d)
+.sidebar button{
+padding:12px;
+border:none;
+background:#222;
+color:white;
+border-radius:8px;
+cursor:pointer;
+}
 
-Rate Limit:
-- 30 requests/min per user
+.sidebar button:hover{
+background:#00f7ff;
+color:black;
+}
 
-Helmet security enabled
-CORS protected
+/* MAIN */
+.main{
+flex:1;
+padding:15px;
+overflow:auto;
+}
 
-========================================================
-🧠 DATABASE MODELS
-========================================================
+/* CARD */
+.card{
+background:#1c1c1c;
+padding:15px;
+margin-bottom:10px;
+border-radius:10px;
+}
 
-User:
-- email
-- password
-- plan (free/pro)
-- messages[]
-- createdAgents[]
+/* CHAT */
+.chatbox{
+background:#111;
+padding:10px;
+border-radius:10px;
+height:300px;
+overflow-y:auto;
+}
 
-Agent:
-- name
-- creatorId
-- systemPrompt
-- likes
-- public/private
+.input{
+display:flex;
+margin-top:10px;
+gap:8px;
+}
 
-Post:
-- userId
-- content
-- type (tiktok/chat/ai)
-- likes/comments
+input{
+flex:1;
+padding:10px;
+border:none;
+border-radius:8px;
+outline:none;
+}
 
-========================================================
-🤖 AI MARKETPLACE (USER CREATES BOTS)
-========================================================
+button.send{
+padding:10px 15px;
+background:#00f7ff;
+border:none;
+cursor:pointer;
+border-radius:8px;
+color:black;
+}
+</style>
+</head>
 
-POST /agent/create
-→ user creates AI bot
+<body>
 
-GET /agent/public
-→ browse marketplace bots
+<div class="top">🚀 ASCEND AI SUPER PLATFORM</div>
 
-Bots can be:
-✔ Fitness coach
-✔ Study tutor
-✔ Business advisor
-✔ Custom personality AI
+<div class="container">
 
-========================================================
-🔥 VIRAL FEED (TIKTOK + INSTAGRAM + AI CHAT)
-========================================================
+<!-- SIDEBAR -->
+<div class="sidebar">
+<button onclick="openTab('feed')">🔥 Feed</button>
+<button onclick="openTab('chat')">🤖 AI Chat</button>
+<button onclick="openTab('market')">🧠 Marketplace</button>
+<button onclick="openTab('dashboard')">📊 Dashboard</button>
+<button onclick="openTab('voice')">🎙 Voice AI</button>
+</div>
 
-- Vertical swipe feed (TikTok style)
-- AI-generated posts
-- Chat under every post
-- Like/comment/share system
-- Real-time updates (Socket.io)
+<!-- MAIN -->
+<div class="main">
 
-========================================================
-🎙️ LIVE AI VOICE CALL SYSTEM
-========================================================
+<!-- FEED -->
+<div id="feed" class="tab">
+<div class="card">🔥 Viral AI Post #1</div>
+<div class="card">🔥 Viral AI Post #2</div>
+<div class="card">🔥 AI Generated Feed</div>
+</div>
 
-- WebRTC voice chat
-- AI responds in real-time
-- Voice → text → AI → voice reply
-- “Jarvis mode conversation”
+<!-- CHAT -->
+<div id="chat" class="tab" style="display:none">
+<div class="chatbox" id="chatbox"></div>
 
-========================================================
-🤝 REAL-TIME AI ROOMS
-========================================================
+<div class="input">
+<input id="msg" placeholder="Ask AI..." />
+<button class="send" onclick="send()">Send</button>
+</div>
+</div>
 
-Socket.io rooms:
-- group AI chat
-- collaborative AI editing
-- shared brain sessions
+<!-- MARKET -->
+<div id="market" class="tab" style="display:none">
+<div class="card">🧠 Fitness AI Bot</div>
+<div class="card">📚 Study AI Bot</div>
+<div class="card">💰 Finance AI Bot</div>
+</div>
 
-========================================================
-💰 STRIPE SUBSCRIPTION SYSTEM
-========================================================
+<!-- DASHBOARD -->
+<div id="dashboard" class="tab" style="display:none">
+<div class="card">📊 Users: 1,234</div>
+<div class="card">💰 Revenue: $9,999</div>
+<div class="card">🤖 Agents: 56</div>
+</div>
 
-Plan:
-- Free
-- Pro ($9.99/month)
+<!-- VOICE -->
+<div id="voice" class="tab" style="display:none">
+<div class="card">🎙 Voice AI System Ready</div>
+<button onclick="startVoice()">Start Voice</button>
+</div>
 
-Stripe:
-- recurring billing
-- cancel anytime
-- webhook updates user plan
+</div>
+</div>
 
-========================================================
-📊 ANALYTICS DASHBOARD
-========================================================
+<script>
 
-Charts show:
-- Users growth
-- Revenue
-- Active AI agents
-- Posts engagement
+function openTab(id){
+document.querySelectorAll(".tab").forEach(t=>t.style.display="none");
+document.getElementById(id).style.display="block";
+}
 
-Tech:
-Recharts / Chart.js
+/* FIXED CHAT */
+function send(){
+let input=document.getElementById("msg");
+let box=document.getElementById("chatbox");
 
-========================================================
-🌐 FRONTEND UI (REACT)
-========================================================
+let text=input.value.trim();
+if(!text) return;
 
-UI STYLE:
-✔ Dark neon cyberpunk
-✔ TikTok swipe feed
-✔ ChatGPT chat panel
-✔ Instagram cards
-✔ Glassmorphism dashboard
+box.innerHTML += `<div class="card">You: ${text}</div>`;
 
-========================================================
-📱 MOBILE APP (APK + IOS)
-========================================================
+/* AI RESPONSE */
+let reply="🤖 I am your AI assistant.";
 
-Capacitor:
-npx cap init
-npx cap add android
-npx cap add ios
+if(text.includes("fitness")) reply="🏋️ Train daily with discipline.";
+if(text.includes("money")) reply="💰 Focus on skills + execution.";
+if(text.includes("study")) reply="📚 Learn consistently every day.";
 
-Build → Play Store ready APK
+/* FIXED AUTO SCROLL */
+setTimeout(()=>{
+box.innerHTML += `<div class="card">${reply}</div>`;
+box.scrollTop = box.scrollHeight;
+},400);
 
-========================================================
-🚀 ONE CLICK DEPLOY
-========================================================
+input.value="";
+}
 
-Backend:
-- Render / Railway / AWS
+/* VOICE FIX */
+function startVoice(){
+alert("🎙 Voice AI is UI demo only. Backend needed for real voice.");
+}
 
-Frontend:
-- Vercel
+</script>
 
-Database:
-- MongoDB Atlas
-
-Domain:
-- Cloudflare
-
-SSL:
-- Auto HTTPS
-
-========================================================
-🔥 PRODUCTION SECURITY
-========================================================
-
-✔ JWT refresh tokens
-✔ Rate limiting
-✔ Helmet security headers
-✔ Input validation
-✔ API protection
-✔ Socket authentication
-
-========================================================
-🏁 FINAL RESULT
-
-YOU BUILT:
-
-🚀 AI SaaS Startup Platform
-🤖 AI Marketplace (like GPT Store)
-📱 TikTok + Instagram + ChatGPT hybrid app
-💰 Subscription revenue system
-🎙️ Live AI voice assistant
-📊 Analytics dashboard
-👨‍💻 Admin panel
-📦 Mobile app ready
-☁️ Fully deployable startup
-
-========================================================
+</body>
+</html>
